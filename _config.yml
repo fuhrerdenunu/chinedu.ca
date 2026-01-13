@@ -1,14 +1,12 @@
 title: Chinedu
 description: Personal blog and photo gallery
 url: "https://chinedu.ca"
-baseurl: ""
+baseurl: "/chinedu.ca"
 
 author: Chinedu
 
-# Build settings
 markdown: kramdown
 permalink: /blog/:title/
-
 remote_theme: jekyll/minima
 
 header_pages:

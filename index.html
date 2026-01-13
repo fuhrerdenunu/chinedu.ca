@@ -1,0 +1,56 @@
+---
+layout: default
+title: Home
+---
+
+<section class="hero">
+  <h1 class="hero-title">CHINEDU</h1>
+  <p class="hero-subtitle">Personal blog and photo gallery</p>
+</section>
+
+<section id="about">
+  <p class="section-title fade-in">About</p>
+  <div class="about-content fade-in">
+    <p>Welcome to my personal space. I'm a Systems Analyst working in fintech, passionate about technology and photography. This is where I share my thoughts, projects, and captured moments.</p>
+  </div>
+</section>
+
+<section id="photos">
+  <p class="section-title fade-in">Photos</p>
+  
+  <div class="category-filters fade-in">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="travel">Travel</button>
+    <button class="filter-btn" data-filter="food">Food</button>
+    <button class="filter-btn" data-filter="personal">Personal</button>
+    <button class="filter-btn" data-filter="family">Family</button>
+  </div>
+  
+  <div class="gallery-grid fade-in">
+    {% for image in site.static_files %}
+      {% if image.path contains '/photos/' and image.extname == '.jpg' or image.extname == '.png' %}
+        {% assign category = image.path | split: '/' | slice: 2 | first %}
+        <div class="gallery-item" data-category="{{ category }}">
+          <a href="{{ image.path | relative_url }}" data-lightbox="gallery" data-title="{{ category | capitalize }}">
+            <img src="{{ image.path | relative_url }}" alt="{{ category }} photo">
+            <div class="overlay">
+              <h3>{{ category | capitalize }}</h3>
+            </div>
+          </a>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+<section id="blog">
+  <p class="section-title fade-in">Blog</p>
+  <div class="blog-list fade-in">
+    {% for post in site.posts %}
+    <article class="blog-item">
+      <p class="blog-date">{{ post.date | date: "%B %d, %Y" }}</p>
+      <a href="{{ post.url | relative_url }}" class="blog-title">{{ post.title }}</a>
+    </article>
+    {% endfor %}
+  </div>
+</section>

@@ -4,16 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ page.title }} | {{ site.title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
 </head>
 <body>
+  <div class="cursor"></div>
+  <div class="cursor-follower"></div>
+
   <nav class="navbar">
     <a href="{{ '/' | relative_url }}" class="logo">{{ site.title }}</a>
     <div class="nav-links">
       <a href="#about">About</a>
       <a href="#photos">Photos</a>
       <a href="#blog">Blog</a>
+      <a href="#contact">Contact</a>
     </div>
   </nav>
   
@@ -22,7 +29,7 @@
   </main>
 
   <footer>
-    <p>&copy; {{ 'now' | date: "%Y" }} {{ site.title }}</p>
+    <p>&copy; {{ 'now' | date: "%Y" }} {{ site.title }}. All rights reserved.</p>
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>

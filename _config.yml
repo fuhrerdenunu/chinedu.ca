@@ -9,7 +9,7 @@ author: Chinedu
 markdown: kramdown
 permalink: /blog/:title/
 
-theme: minima
+remote_theme: jekyll/minima
 
 header_pages:
   - about.markdown

@@ -1,0 +1,20 @@
+title: Chinedu
+description: Personal blog and photo gallery
+url: "https://chinedu.ca"
+baseurl: ""
+
+author: Chinedu
+
+# Build settings
+markdown: kramdown
+permalink: /blog/:title/
+
+theme: minima
+
+header_pages:
+  - about.markdown
+  - photos.md
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag

@@ -14,7 +14,6 @@ body {
   background-color: #0a0a0a;
   color: #ffffff;
   line-height: 1.6;
-  cursor: none;
   overflow-x: hidden;
 }
 
@@ -57,40 +56,61 @@ body {
   top: 0;
   left: 0;
   width: 0%;
-  height: 3px;
+  height: 4px;
   background: linear-gradient(90deg, #fff, #888);
   z-index: 10001;
-  transition: width 0.1s ease;
 }
 
-/* Custom Cursor */
-.cursor {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #fff;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  transition: transform 0.1s ease;
-  mix-blend-mode: difference;
+/* Custom Cursor - Desktop Only */
+@media (min-width: 969px) {
+  body.has-cursor {
+    cursor: none;
+  }
+  
+  .cursor {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease;
+    mix-blend-mode: difference;
+    opacity: 0;
+  }
+  
+  .cursor.active {
+    opacity: 1;
+  }
+
+  .cursor-follower {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.3);
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
+    opacity: 0;
+  }
+  
+  .cursor-follower.active {
+    opacity: 1;
+  }
+
+  .cursor-follower.hover {
+    width: 60px;
+    height: 60px;
+    border-color: #fff;
+  }
 }
 
-.cursor-follower {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.3);
-  position: fixed;
-  pointer-events: none;
-  z-index: 9998;
-  transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
-}
-
-.cursor-follower.hover {
-  width: 60px;
-  height: 60px;
-  border-color: #fff;
+@media (max-width: 968px) {
+  .cursor, .cursor-follower {
+    display: none !important;
+  }
 }
 
 /* Navbar */
@@ -529,9 +549,9 @@ section {
 
 /* Blog Post Page */
 .blog-post {
-  max-width: 800px;
+  max-width: 750px;
   margin: 0 auto;
-  padding: 10rem 2rem 6rem;
+  padding: 12rem 2rem 6rem;
 }
 
 .post-header {
@@ -549,25 +569,27 @@ section {
 
 .post-title {
   font-family: 'Syne', sans-serif;
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   line-height: 1.2;
   color: #fff;
 }
 
 .post-content {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   line-height: 2;
-  color: #ccc;
+  color: #bbb;
 }
 
 .post-content p {
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .post-content em {
   color: #999;
   font-style: italic;
+  display: block;
+  margin-bottom: 1.75rem;
 }
 
 .post-content hr {
@@ -661,14 +683,6 @@ footer {
 
 /* Responsive */
 @media (max-width: 968px) {
-  body {
-    cursor: auto;
-  }
-  
-  .cursor, .cursor-follower {
-    display: none;
-  }
-  
   .menu-toggle {
     display: flex;
   }
@@ -718,5 +732,9 @@ footer {
     right: 1.5rem;
     width: 45px;
     height: 45px;
+  }
+  
+  .blog-post {
+    padding: 10rem 1.5rem 4rem;
   }
 }

@@ -5,12 +5,17 @@ window.addEventListener('load', () => {
   }, 1500);
 });
 
-// Custom cursor
+// Custom cursor - only on desktop
 const cursor = document.querySelector('.cursor');
 const follower = document.querySelector('.cursor-follower');
 
-if (cursor && follower) {
+if (cursor && follower && window.innerWidth > 968) {
+  document.body.classList.add('has-cursor');
+  
   document.addEventListener('mousemove', (e) => {
+    cursor.classList.add('active');
+    follower.classList.add('active');
+    
     cursor.style.left = e.clientX + 'px';
     cursor.style.top = e.clientY + 'px';
     
@@ -42,7 +47,6 @@ if (menuToggle) {
     navLinks.classList.toggle('active');
   });
 
-  // Close menu when clicking a link
   navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       menuToggle.classList.remove('active');
@@ -97,7 +101,7 @@ if (progressBar) {
   });
 }
 
-// Scroll animations with Intersection Observer
+// Scroll animations
 const observerOptions = {
   threshold: 0.1,
   rootMargin: '0px 0px -100px 0px'
@@ -115,16 +119,14 @@ document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .stagger-c
   observer.observe(el);
 });
 
-// Navbar background on scroll
+// Navbar scroll effect
 const navbar = document.querySelector('.navbar');
 
 window.addEventListener('scroll', () => {
   if (window.scrollY > 100) {
     navbar.style.background = 'rgba(10, 10, 10, 0.95)';
-    navbar.style.padding = '1rem 3rem';
   } else {
     navbar.style.background = 'rgba(10, 10, 10, 0.8)';
-    navbar.style.padding = '1.5rem 3rem';
   }
 });
 
@@ -136,33 +138,25 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
     
     const filter = this.dataset.filter;
     document.querySelectorAll('.gallery-item').forEach(item => {
+      item.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
       if (filter === 'all' || item.dataset.category === filter) {
-        item.style.opacity = '0';
-        item.style.transform = 'scale(0.8)';
+        item.style.display = 'block';
         setTimeout(() => {
-          item.style.display = 'block';
-          setTimeout(() => {
-            item.style.opacity = '1';
-            item.style.transform = 'scale(1)';
-          }, 50);
-        }, 300);
+          item.style.opacity = '1';
+          item.style.transform = 'scale(1)';
+        }, 50);
       } else {
         item.style.opacity = '0';
         item.style.transform = 'scale(0.8)';
         setTimeout(() => {
           item.style.display = 'none';
-        }, 300);
+        }, 400);
       }
     });
   });
 });
 
-// Add transition styles to gallery items
-document.querySelectorAll('.gallery-item').forEach(item => {
-  item.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-});
-
-// Parallax effect on hero
+// Hero parallax
 const hero = document.querySelector('.hero');
 if (hero) {
   window.addEventListener('scroll', () => {
@@ -172,7 +166,7 @@ if (hero) {
   });
 }
 
-// Text reveal animation helper
+// Hero title letter animation
 function animateText(element) {
   const text = element.textContent;
   element.innerHTML = '';
@@ -185,7 +179,6 @@ function animateText(element) {
   });
 }
 
-// Initialize hero title animation
 const heroTitle = document.querySelector('.hero-title');
 if (heroTitle && !heroTitle.querySelector('.letter')) {
   animateText(heroTitle);

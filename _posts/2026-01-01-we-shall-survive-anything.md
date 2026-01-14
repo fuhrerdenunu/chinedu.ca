@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: "We Shall Survive Anything"
 date: 2026-01-01
 ---

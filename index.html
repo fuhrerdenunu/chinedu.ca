@@ -22,30 +22,23 @@ title: Home
 <section id="photos">
   <p class="section-title fade-in">Photos</p>
   
-  <div class="category-filters fade-in stagger-children">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="travel">Travel</button>
-    <button class="filter-btn" data-filter="food">Food</button>
-    <button class="filter-btn" data-filter="personal">Personal</button>
-    <button class="filter-btn" data-filter="family">Family</button>
-  </div>
-  
-  <div class="gallery-grid fade-in">
-    {% for image in site.static_files %}
-      {% if image.path contains '/photos/' and image.extname == '.jpg' or image.extname == '.png' %}
-        {% assign path_parts = image.path | split: '/' %}
-        {% assign category = path_parts[2] %}
-        <div class="gallery-item" data-category="{{ category }}">
-          <a href="{{ image.path | relative_url }}" data-lightbox="gallery" data-title="{{ category | capitalize }}">
-            <img src="{{ image.path | relative_url }}" alt="{{ category }} photo" loading="lazy">
-            <div class="overlay">
-              <h3>{{ category | capitalize }}</h3>
-              <p>View Photo</p>
-            </div>
-          </a>
-        </div>
-      {% endif %}
-    {% endfor %}
+  <div class="category-links fade-in">
+    <a href="/photos/travel/" class="category-card">
+      <h3>Travel</h3>
+      <p>Explore destinations →</p>
+    </a>
+    <a href="/photos/family/" class="category-card">
+      <h3>Family</h3>
+      <p>Precious moments →</p>
+    </a>
+    <a href="/photos/food/" class="category-card">
+      <h3>Food</h3>
+      <p>Culinary adventures →</p>
+    </a>
+    <a href="/photos/personal/" class="category-card">
+      <h3>Personal</h3>
+      <p>Life moments →</p>
+    </a>
   </div>
 </section>
 

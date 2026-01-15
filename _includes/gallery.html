@@ -1,0 +1,26 @@
+{% comment %}
+  Gallery Include Component
+  Usage: {% include gallery.html folder="photos/travel/boston-usa" name="boston" title="Boston, USA" alt_prefix="Boston" %}
+
+  Parameters:
+  - folder: The path to the folder containing images (required)
+  - name: The lightbox gallery name for grouping (required)
+  - title: The lightbox title shown for images (required)
+  - alt_prefix: Prefix for alt text (optional, defaults to title)
+{% endcomment %}
+
+{% assign alt_text = include.alt_prefix | default: include.title %}
+
+<div class="gallery-grid">
+  {% for image in site.static_files %}
+    {% if image.path contains include.folder %}
+      {% if image.extname == '.jpg' or image.extname == '.jpeg' or image.extname == '.png' or image.extname == '.webp' %}
+        <div class="gallery-item">
+          <a href="{{ image.path | relative_url }}" data-lightbox="{{ include.name }}" data-title="{{ include.title }}">
+            <img src="{{ image.path | relative_url }}" alt="{{ alt_text }} - {{ image.basename }}" loading="lazy">
+          </a>
+        </div>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</div>

@@ -1,29 +1,53 @@
+// Utility: Throttle function for performance
+function throttle(func, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
+// Check for reduced motion preference
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 // Loading screen
 window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.querySelector('.loader').classList.add('hidden');
-  }, 1500);
+  const loader = document.querySelector('.loader');
+  if (loader) {
+    if (prefersReducedMotion) {
+      loader.classList.add('hidden');
+    } else {
+      setTimeout(() => {
+        loader.classList.add('hidden');
+      }, 1500);
+    }
+  }
 });
 
-// Custom cursor - only on desktop
+// Custom cursor - only on desktop and if no reduced motion
 const cursor = document.querySelector('.cursor');
 const follower = document.querySelector('.cursor-follower');
 
-if (cursor && follower && window.innerWidth > 968) {
+if (cursor && follower && window.innerWidth > 968 && !prefersReducedMotion) {
   document.body.classList.add('has-cursor');
-  
-  document.addEventListener('mousemove', (e) => {
+
+  const handleMouseMove = throttle((e) => {
     cursor.classList.add('active');
     follower.classList.add('active');
-    
+
     cursor.style.left = e.clientX + 'px';
     cursor.style.top = e.clientY + 'px';
-    
+
     setTimeout(() => {
       follower.style.left = e.clientX - 15 + 'px';
       follower.style.top = e.clientY - 15 + 'px';
     }, 50);
-  });
+  }, 16); // ~60fps
+
+  document.addEventListener('mousemove', handleMouseMove);
 
   document.querySelectorAll('a, button, .gallery-item').forEach(el => {
     el.addEventListener('mouseenter', () => {
@@ -41,17 +65,27 @@ if (cursor && follower && window.innerWidth > 968) {
 const menuToggle = document.querySelector('.menu-toggle');
 const navLinks = document.querySelector('.nav-links');
 
-if (menuToggle) {
+if (menuToggle && navLinks) {
   menuToggle.addEventListener('click', () => {
     menuToggle.classList.toggle('active');
     navLinks.classList.toggle('active');
   });
 
+  // Close menu on link click
   navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       menuToggle.classList.remove('active');
       navLinks.classList.remove('active');
     });
+  });
+
+  // Close menu on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+      menuToggle.classList.remove('active');
+      navLinks.classList.remove('active');
+      menuToggle.focus();
+    }
   });
 }
 
@@ -62,7 +96,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     const target = document.querySelector(this.getAttribute('href'));
     if (target) {
       target.scrollIntoView({
-        behavior: 'smooth',
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
         block: 'start'
       });
     }
@@ -73,18 +107,20 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 const backToTop = document.querySelector('.back-to-top');
 
 if (backToTop) {
-  window.addEventListener('scroll', () => {
+  const handleBackToTopScroll = throttle(() => {
     if (window.scrollY > 500) {
       backToTop.classList.add('visible');
     } else {
       backToTop.classList.remove('visible');
     }
-  });
+  }, 100);
+
+  window.addEventListener('scroll', handleBackToTopScroll);
 
   backToTop.addEventListener('click', () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: prefersReducedMotion ? 'auto' : 'smooth'
     });
   });
 }
@@ -93,12 +129,14 @@ if (backToTop) {
 const progressBar = document.querySelector('.reading-progress');
 
 if (progressBar) {
-  window.addEventListener('scroll', () => {
+  const handleProgressScroll = throttle(() => {
     const scrollTop = window.scrollY;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
     const progress = (scrollTop / docHeight) * 100;
     progressBar.style.width = progress + '%';
-  });
+  }, 16);
+
+  window.addEventListener('scroll', handleProgressScroll);
 }
 
 // Scroll animations
@@ -122,20 +160,24 @@ document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .stagger-c
 // Navbar scroll effect
 const navbar = document.querySelector('.navbar');
 
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 100) {
-    navbar.style.background = 'rgba(10, 10, 10, 0.95)';
-  } else {
-    navbar.style.background = 'rgba(10, 10, 10, 0.8)';
-  }
-});
+if (navbar) {
+  const handleNavbarScroll = throttle(() => {
+    if (window.scrollY > 100) {
+      navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+    } else {
+      navbar.style.background = 'rgba(10, 10, 10, 0.8)';
+    }
+  }, 100);
+
+  window.addEventListener('scroll', handleNavbarScroll);
+}
 
 // Gallery filter
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', function() {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     this.classList.add('active');
-    
+
     const filter = this.dataset.filter;
     document.querySelectorAll('.gallery-item').forEach(item => {
       item.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
@@ -156,14 +198,19 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   });
 });
 
-// Hero parallax
+// Hero parallax - only if no reduced motion preference
 const hero = document.querySelector('.hero');
-if (hero) {
-  window.addEventListener('scroll', () => {
+if (hero && !prefersReducedMotion) {
+  const handleHeroParallax = throttle(() => {
     const scrolled = window.scrollY;
-    hero.style.transform = `translateY(${scrolled * 0.3}px)`;
-    hero.style.opacity = 1 - (scrolled * 0.002);
-  });
+    // Only apply parallax when hero is in view
+    if (scrolled < window.innerHeight) {
+      hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+      hero.style.opacity = 1 - (scrolled * 0.002);
+    }
+  }, 16);
+
+  window.addEventListener('scroll', handleHeroParallax);
 }
 
 // Hero title letter animation
@@ -180,6 +227,6 @@ function animateText(element) {
 }
 
 const heroTitle = document.querySelector('.hero-title');
-if (heroTitle && !heroTitle.querySelector('.letter')) {
+if (heroTitle && !heroTitle.querySelector('.letter') && !prefersReducedMotion) {
   animateText(heroTitle);
 }

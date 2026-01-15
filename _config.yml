@@ -1,13 +1,27 @@
 title: Chinedu
-description: Travel and family moments
+description: Travel and family moments - a personal photography portfolio showcasing journeys around the world
 url: "https://chinedu.ca"
 baseurl: ""
 
-author: Chinedu
+author:
+  name: Chinedu
+  url: https://chinedu.ca
+
+# Social links for SEO
+social:
+  name: Chinedu
+  links:
+    - https://chinedu.ca
+
+# Default image for social sharing
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /assets/favicon.svg
 
 markdown: kramdown
 permalink: /blog/:title/
-remote_theme: jekyll/minima
 
 header_pages:
   - about.markdown

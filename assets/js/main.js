@@ -13,19 +13,20 @@ function throttle(func, limit) {
 // Check for reduced motion preference
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Loading screen
-window.addEventListener('load', () => {
-  const loader = document.querySelector('.loader');
-  if (loader) {
-    if (prefersReducedMotion) {
-      loader.classList.add('hidden');
-    } else {
-      setTimeout(() => {
-        loader.classList.add('hidden');
-      }, 1500);
-    }
-  }
-});
+// Configure Lightbox2 for better gallery experience
+if (typeof lightbox !== 'undefined') {
+  lightbox.option({
+    resizeDuration: 200,
+    fadeDuration: 200,
+    imageFadeDuration: 200,
+    wrapAround: true,
+    albumLabel: '%1 of %2',
+    disableScrolling: true,
+    fitImagesInViewport: true,
+    maxWidth: window.innerWidth * 0.9,
+    maxHeight: window.innerHeight * 0.9
+  });
+}
 
 // Custom cursor - only on desktop and if no reduced motion
 const cursor = document.querySelector('.cursor');

@@ -1,3 +1,22 @@
+/* CSS Custom Properties */
+:root {
+  --color-bg: #0a0a0a;
+  --color-bg-elevated: #111;
+  --color-bg-hover: #1a1a1a;
+  --color-text: #fff;
+  --color-text-muted: #999;
+  --color-text-subtle: #888;
+  --color-border: #222;
+  --color-border-hover: #333;
+  --color-border-muted: #1a1a1a;
+  --font-heading: 'Syne', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.3s;
+  --transition-medium: 0.5s;
+  --transition-slow: 0.8s;
+}
+
 /* Reset & Base */
 * {
   margin: 0;
@@ -288,7 +307,7 @@ body {
 
 .hero-subtitle {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--color-text-muted);
   margin-top: 2rem;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -311,7 +330,7 @@ body {
   font-size: 0.7rem;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .scroll-line {
@@ -344,7 +363,7 @@ section {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 4px;
-  color: #666;
+  color: var(--color-text-muted);
   margin-bottom: 4rem;
   display: flex;
   align-items: center;
@@ -355,7 +374,7 @@ section {
   content: '';
   width: 40px;
   height: 1px;
-  background: #666;
+  background: var(--color-text-muted);
 }
 
 /* About Section */
@@ -484,7 +503,7 @@ section {
 
 .blog-date {
   font-size: 0.75rem;
-  color: #555;
+  color: var(--color-text-subtle);
   margin-bottom: 0.75rem;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -561,7 +580,7 @@ section {
 
 .post-date {
   font-size: 0.8rem;
-  color: #666;
+  color: var(--color-text-muted);
   letter-spacing: 3px;
   text-transform: uppercase;
   margin-bottom: 1.5rem;
@@ -748,12 +767,12 @@ footer {
 
 .photo-category .back-link {
   display: inline-block;
-  color: #666;
+  color: var(--color-text-muted);
   text-decoration: none;
   font-size: 0.85rem;
   letter-spacing: 1px;
   margin-bottom: 2rem;
-  transition: color 0.3s ease;
+  transition: color var(--transition-fast) ease;
 }
 
 .photo-category .back-link:hover {
@@ -800,7 +819,7 @@ footer {
 
 .location-card p {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--color-text-muted);
   letter-spacing: 1px;
 }
 
@@ -868,9 +887,9 @@ footer {
 
 .category-card p {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--color-text-muted);
   letter-spacing: 1px;
-  transition: color 0.3s ease;
+  transition: color var(--transition-fast) ease;
 }
 
 .category-card:hover p {
@@ -881,12 +900,105 @@ footer {
   .category-links {
     grid-template-columns: 1fr;
   }
-  
+
   .category-card {
     padding: 2rem;
   }
-  
+
   .category-card h3 {
     font-size: 1.5rem;
+  }
+}
+
+/* Focus Styles for Accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+}
+
+.nav-links a:focus-visible {
+  color: var(--color-text);
+}
+
+.nav-links a:focus-visible::after {
+  width: 100%;
+}
+
+.menu-toggle:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+}
+
+.filter-btn:focus-visible {
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+
+.gallery-item:focus-within {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+}
+
+/* Skip Link for Keyboard Navigation */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-text);
+  color: var(--color-bg);
+  padding: 1rem 2rem;
+  z-index: 10002;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: top var(--transition-fast) ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Reduced Motion for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .loader {
+    display: none;
+  }
+
+  .hero-title .letter {
+    opacity: 1;
+    transform: none;
+  }
+
+  .fade-in,
+  .slide-in-left,
+  .slide-in-right {
+    opacity: 1;
+    transform: none;
+  }
+
+  .stagger-children > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  .cursor,
+  .cursor-follower {
+    display: none !important;
   }
 }

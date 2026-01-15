@@ -1,10 +1,12 @@
 ---
 layout: default
 title: Personal Photos
+description: Personal photo collection
 ---
 
-{% for image in site.static_files %}
-  {% if image.path contains 'photos/personal' and image.path contains '.jpg' or image.path contains '.png' %}
-  ![Personal photo]({{ image.path }})
-  {% endif %}
-{% endfor %}
+<section class="photo-category">
+  <a href="/" class="back-link">← Back to Home</a>
+  <h1 class="location-title">Personal</h1>
+
+  {% include gallery.html folder="photos/personal" name="personal" title="Personal Photos" %}
+</section>

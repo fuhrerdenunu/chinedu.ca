@@ -64,7 +64,7 @@ body.fade-in-ready {
 /* Custom Cursor - Desktop Only */
 @media (min-width: 969px) {
   body.has-cursor {
-    cursor: none;
+    cursor: auto;
   }
   
   .cursor {

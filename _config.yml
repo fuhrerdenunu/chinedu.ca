@@ -3,6 +3,10 @@ description: Travel and family moments - a personal photography portfolio showca
 url: "https://chinedu.ca"
 baseurl: ""
 
+# Include files starting with underscore (e.g., camera photos like _DSC1234.jpg)
+include:
+  - "_*"
+
 author:
   name: Chinedu
   url: https://chinedu.ca

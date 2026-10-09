@@ -4,11 +4,18 @@ title: Home
 ---
 
 <section class="hero">
-  <h1 class="hero-title">CHINEDU</h1>
-  <p class="hero-subtitle">Travel • Family • Moments</p>
+  <div class="hero-content">
+    <span class="hero-badge">Photography Portfolio</span>
+    <h1 class="hero-title">CHINEDU</h1>
+    <p class="hero-subtitle">Travel • Family • Moments</p>
+    <div class="hero-cta">
+      <a href="#photos" class="btn btn-primary">Explore Photos</a>
+      <a href="#about" class="btn btn-secondary">Learn More</a>
+    </div>
+  </div>
   <div class="hero-scroll">
     <span>Scroll</span>
-    <div class="scroll-line"></div>
+    <div class="scroll-indicator"></div>
   </div>
 </section>
 
@@ -16,28 +23,48 @@ title: Home
   <p class="section-title fade-in">About</p>
   <div class="about-content fade-in">
     <p>Welcome to my corner of the internet. This is where I share <span class="highlight">adventures</span>, <span class="highlight">family moments</span>, and stories from our travels. A place to document memories and the little things that matter most.</p>
+    <div class="about-stats">
+      <div class="stat">
+        <div class="stat-value">4</div>
+        <div class="stat-label">Photo Collections</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">7+</div>
+        <div class="stat-label">Destinations</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">∞</div>
+        <div class="stat-label">Memories</div>
+      </div>
+    </div>
   </div>
 </section>
 
 <section id="photos">
-  <p class="section-title fade-in">Photos</p>
-  
-  <div class="category-links fade-in">
+  <div class="section-header">
+    <p class="section-title fade-in">Photos</p>
+  </div>
+
+  <div class="category-links fade-in stagger-children">
     <a href="/photos/travel/" class="category-card">
+      <div class="category-card-icon">🌍</div>
       <h3>Travel</h3>
-      <p>Explore destinations →</p>
+      <p>Explore destinations</p>
     </a>
     <a href="/photos/family/" class="category-card">
+      <div class="category-card-icon">👨‍👩‍👧‍👦</div>
       <h3>Family</h3>
-      <p>Precious moments →</p>
+      <p>Precious moments</p>
     </a>
     <a href="/photos/food/" class="category-card">
+      <div class="category-card-icon">🍽️</div>
       <h3>Food</h3>
-      <p>Culinary adventures →</p>
+      <p>Culinary adventures</p>
     </a>
     <a href="/photos/personal/" class="category-card">
+      <div class="category-card-icon">📸</div>
       <h3>Personal</h3>
-      <p>Life moments →</p>
+      <p>Life moments</p>
     </a>
   </div>
 </section>
@@ -61,7 +88,7 @@ title: Home
     <p>Want to connect, share travel tips, or just say hi? I'd love to hear from you.</p>
     <div class="contact-links">
       <a href="mailto:chinedu@chinedu.ca">→ chinedu@chinedu.ca</a>
-      <a href="https://instagram.com" target="_blank">→ Instagram</a>
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">→ Instagram</a>
     </div>
   </div>
 </section>

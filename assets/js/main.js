@@ -13,6 +13,22 @@ function throttle(func, limit) {
 // Check for reduced motion preference
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Theme Toggle
+const themeToggle = document.querySelector('.theme-toggle');
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+
+    // Update theme-color meta tag
+    const themeColor = newTheme === 'light' ? '#fafbfc' : '#050508';
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', themeColor);
+  });
+}
+
 // Configure Lightbox2 for better gallery experience
 if (typeof lightbox !== 'undefined') {
   lightbox.option({
@@ -39,18 +55,18 @@ if (cursor && follower && window.innerWidth > 968 && !prefersReducedMotion) {
     cursor.classList.add('active');
     follower.classList.add('active');
 
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
+    cursor.style.left = e.clientX - 4 + 'px';
+    cursor.style.top = e.clientY - 4 + 'px';
 
     setTimeout(() => {
-      follower.style.left = e.clientX - 15 + 'px';
-      follower.style.top = e.clientY - 15 + 'px';
+      follower.style.left = e.clientX - 16 + 'px';
+      follower.style.top = e.clientY - 16 + 'px';
     }, 50);
-  }, 16); // ~60fps
+  }, 16);
 
   document.addEventListener('mousemove', handleMouseMove);
 
-  document.querySelectorAll('a, button, .gallery-item').forEach(el => {
+  document.querySelectorAll('a, button, .gallery-item, .category-card').forEach(el => {
     el.addEventListener('mouseenter', () => {
       follower.classList.add('hover');
       cursor.style.transform = 'scale(0.5)';
@@ -68,23 +84,29 @@ const navLinks = document.querySelector('.nav-links');
 
 if (menuToggle && navLinks) {
   menuToggle.addEventListener('click', () => {
-    menuToggle.classList.toggle('active');
+    const isActive = menuToggle.classList.toggle('active');
     navLinks.classList.toggle('active');
+    menuToggle.setAttribute('aria-expanded', isActive);
+
+    // Prevent body scroll when menu is open
+    document.body.style.overflow = isActive ? 'hidden' : '';
   });
 
-  // Close menu on link click
   navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       menuToggle.classList.remove('active');
       navLinks.classList.remove('active');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
     });
   });
 
-  // Close menu on Escape key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && navLinks.classList.contains('active')) {
       menuToggle.classList.remove('active');
       navLinks.classList.remove('active');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
       menuToggle.focus();
     }
   });
@@ -133,7 +155,7 @@ if (progressBar) {
   const handleProgressScroll = throttle(() => {
     const scrollTop = window.scrollY;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = (scrollTop / docHeight) * 100;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
     progressBar.style.width = progress + '%';
   }, 16);
 
@@ -143,7 +165,7 @@ if (progressBar) {
 // Scroll animations
 const observerOptions = {
   threshold: 0.1,
-  rootMargin: '0px 0px -100px 0px'
+  rootMargin: '0px 0px -50px 0px'
 };
 
 const observer = new IntersectionObserver((entries) => {
@@ -164,9 +186,9 @@ const navbar = document.querySelector('.navbar');
 if (navbar) {
   const handleNavbarScroll = throttle(() => {
     if (window.scrollY > 100) {
-      navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+      navbar.classList.add('scrolled');
     } else {
-      navbar.style.background = 'rgba(10, 10, 10, 0.8)';
+      navbar.classList.remove('scrolled');
     }
   }, 100);
 
@@ -190,7 +212,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
         }, 50);
       } else {
         item.style.opacity = '0';
-        item.style.transform = 'scale(0.8)';
+        item.style.transform = 'scale(0.95)';
         setTimeout(() => {
           item.style.display = 'none';
         }, 400);
@@ -204,10 +226,12 @@ const hero = document.querySelector('.hero');
 if (hero && !prefersReducedMotion) {
   const handleHeroParallax = throttle(() => {
     const scrolled = window.scrollY;
-    // Only apply parallax when hero is in view
     if (scrolled < window.innerHeight) {
-      hero.style.transform = `translateY(${scrolled * 0.3}px)`;
-      hero.style.opacity = 1 - (scrolled * 0.002);
+      const heroContent = hero.querySelector('.hero-content');
+      if (heroContent) {
+        heroContent.style.transform = `translateY(${scrolled * 0.2}px)`;
+        heroContent.style.opacity = 1 - (scrolled * 0.0015);
+      }
     }
   }, 16);
 
@@ -220,9 +244,9 @@ function animateText(element) {
   element.innerHTML = '';
   text.split('').forEach((char, i) => {
     const span = document.createElement('span');
-    span.textContent = char === ' ' ? '\u00A0' : char;
+    span.textContent = char === ' ' ? ' ' : char;
     span.className = 'letter';
-    span.style.animationDelay = `${i * 0.05}s`;
+    span.style.animationDelay = `${i * 0.05 + 0.2}s`;
     element.appendChild(span);
   });
 }
@@ -231,3 +255,27 @@ const heroTitle = document.querySelector('.hero-title');
 if (heroTitle && !heroTitle.querySelector('.letter') && !prefersReducedMotion) {
   animateText(heroTitle);
 }
+
+// Active nav link highlighting
+function updateActiveNavLink() {
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a[href*="#"]');
+
+  let current = '';
+
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 200;
+    if (window.scrollY >= sectionTop) {
+      current = section.getAttribute('id');
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href').includes(current)) {
+      link.classList.add('active');
+    }
+  });
+}
+
+window.addEventListener('scroll', throttle(updateActiveNavLink, 100));

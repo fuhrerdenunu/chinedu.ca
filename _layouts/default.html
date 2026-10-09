@@ -8,12 +8,12 @@
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="description" content="{{ page.description | default: site.description }}">
+  <meta name="theme-color" content="#050508">
 
   {% seo %}
 
   <title>{{ page.title }} | {{ site.title }}</title>
 
-  <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="{{ '/assets/favicon.svg' | relative_url }}">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,37 +21,58 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" integrity="sha512-ZKX+BvQihRJPA8CROKBhDNvoc2aDMOdAlcm7TUQY+35XYtrd3yh95QOOhsPDQY9QnKE0Wqag9y38OIgEvb88cA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <script>
+    (function() {
+      var theme = localStorage.getItem('theme');
+      if (theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+    })();
+  </script>
 </head>
 <body class="fade-in-ready">
-  <!-- Skip Link for Accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="reading-progress"></div>
 
   <div class="cursor"></div>
   <div class="cursor-follower"></div>
 
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <a href="{{ '/' | relative_url }}" class="logo">{{ site.title }}</a>
-    
-    <!-- Hamburger Menu -->
-    <button class="menu-toggle" aria-label="Toggle menu">
+
+    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
       <span></span>
       <span></span>
       <span></span>
     </button>
-    
+
     <div class="nav-links">
       <a href="{{ '/' | relative_url }}#about">About</a>
       <a href="{{ '/' | relative_url }}#photos">Photos</a>
       <a href="{{ '/' | relative_url }}#blog">Blog</a>
       <a href="{{ '/' | relative_url }}#contact">Contact</a>
+      <button class="theme-toggle" aria-label="Toggle theme">
+        <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
     </div>
   </nav>
-  
+
   <main id="main-content">
     {{ content }}
   </main>
 
-  <!-- Back to Top Button -->
   <button class="back-to-top" aria-label="Back to top">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M18 15l-6-6-6 6"/>
@@ -61,6 +82,7 @@
   <footer>
     <p>&copy; {{ 'now' | date: "%Y" }} {{ site.title }}. All rights reserved.</p>
   </footer>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js" integrity="sha512-hR0WXWK1VS+0sDWGDZgmMoTfBjL9F2LZA5cIx0TAM9+r8KGLNt68Ot+d5tymwgwYBKpLDygI49SxRhSp8m0uog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="{{ '/assets/js/main.js' | relative_url }}"></script>

@@ -25,9 +25,13 @@ permalink: /blog/:title/
 
 # Exclude source files from published site
 exclude:
+  - .github
   - README.md
   - Gemfile
   - Gemfile.lock
+  - docs
+  - scripts
+  - tests
   - vendor
   - node_modules
   - "*.gemspec"

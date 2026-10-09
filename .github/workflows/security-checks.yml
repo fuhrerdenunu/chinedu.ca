@@ -7,12 +7,20 @@ on:
       - '_config.yml'
       - '_layouts/**'
       - '_includes/**'
+      - '_headers'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'Gemfile'
   pull_request:
     paths:
       - 'photos/**'
       - '_config.yml'
       - '_layouts/**'
       - '_includes/**'
+      - '_headers'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'Gemfile'
 
 jobs:
   check-image-metadata:
@@ -24,28 +32,38 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libimage-exiftool-perl
 
       - name: Check for sensitive image metadata
+        run: scripts/check-image-metadata.sh photos
+
+  security-regression-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run security regression tests
         run: |
-          echo "Checking for GPS, serial numbers, and sensitive metadata in images..."
-          SENSITIVE_FOUND=0
+          python3 -m unittest tests/test_external_integrity.py -v
+          bash tests/test_image_metadata.sh
+          bash tests/test_site_exclusions.sh
 
-          # Find all image files
-          find photos -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.heic" -o -iname "*.webp" \) -print0 | while IFS= read -r -d '' file; do
-            # Check for sensitive EXIF fields
-            OUTPUT=$(exiftool -GPSLatitude -GPSLongitude -GPSPosition -SerialNumber -InternalSerialNumber -OwnerName -RawFileName "$file" 2>/dev/null)
+  check-external-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-            if [ -n "$OUTPUT" ]; then
-              echo "::error file=$file::Sensitive metadata found in $file"
-              echo "$OUTPUT"
-              SENSITIVE_FOUND=1
-            fi
-          done
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
 
-          if [ $SENSITIVE_FOUND -eq 1 ]; then
-            echo "::error::Images contain sensitive metadata. Please strip metadata before committing."
-            exit 1
-          fi
+      - name: Build site
+        run: bundle exec jekyll build
 
-          echo "No sensitive metadata found in images."
+      - name: Verify generated external-resource integrity
+        run: python3 scripts/check-external-integrity.py _site
 
   check-source-exposure:
     runs-on: ubuntu-latest

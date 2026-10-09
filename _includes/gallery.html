@@ -14,7 +14,8 @@
 <div class="gallery-grid">
   {% for image in site.static_files %}
     {% if image.path contains include.folder %}
-      {% if image.extname == '.jpg' or image.extname == '.jpeg' or image.extname == '.png' or image.extname == '.webp' %}
+      {% assign ext = image.extname | downcase %}
+      {% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' %}
         <div class="gallery-item">
           <a href="{{ image.path | relative_url }}" data-lightbox="{{ include.name }}" data-title="{{ include.title }}">
             <img src="{{ image.path | relative_url }}" alt="{{ alt_text }} - {{ image.basename }}" loading="lazy">
